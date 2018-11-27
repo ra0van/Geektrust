@@ -1,0 +1,16 @@
+# Add any directories, files, or patterns you don't want to be tracked by version control
+##Directories to ignore
+bin/
+*.pdb
+obj/ 
+*.suo
+Debug/
+Release/
+packages/
+.#*
+*/**/*.webinfo
+.vs/
+#Ignore the git merge backup files 
+*.orig
+*.webinfo
+*.bak
