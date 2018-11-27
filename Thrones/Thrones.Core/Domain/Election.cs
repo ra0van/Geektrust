@@ -49,15 +49,15 @@
 
         public Dictionary<IKingdom, HashSet<IKingdom>> GetWinnerAndAllies()
         {
-            if (!this.electionCompleted)
+            if (this.electionCompleted is false)
             {
-                // runElection();
+                this.RunElection();
             }
 
             return this.winnerAndAllies;
         }
 
-        private List<Dictionary<IKingdom, int>> runElection()
+        private void RunElection()
         {
             Dictionary<IKingdom, HashSet<IKingdom>> winners = new Dictionary<IKingdom, HashSet<IKingdom>>();
 
@@ -72,7 +72,7 @@
             // } while (winners.Count > 1);
 
             // this.winnerAndAllies = winners.First();
-            return this.electionResults;
+            this.electionCompleted = true;
         }
     }
 }

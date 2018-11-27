@@ -6,7 +6,7 @@
     using Thrones.Core.Abstract;
     using Thrones.Core.Entities;
 
-    public class Ballot
+    public class Ballot : IBallot
     {
         private readonly HashSet<IKingdom> competingKingdoms;
         private readonly HashSet<IKingdom> electorate;

@@ -21,11 +21,10 @@
             this.AddKingdom(KingdomFactory.CreateKingdom(name: "Space", emblem: "gorilla"));
         }
 
-        public void ClaimTheThrone(IKingdom contendingKingdom, HashSet<IMessage> messages)
+        public void ClaimTheThrone(IBallot ballot)
         {
             try
             {
-                Ballot ballot = new Ballot(contendingKingdom, messages);
                 Dictionary<IKingdom, HashSet<IKingdom>> winners = ballot.GetWinners();
 
                 KeyValuePair<IKingdom, HashSet<IKingdom>> winner = winners.FirstOrDefault();

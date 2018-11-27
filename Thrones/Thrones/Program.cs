@@ -52,9 +52,11 @@
             messages.Add(new Message(contendingKingdom, southeros["Land"], "a1d22n333a4444p"));
             messages.Add(new Message(contendingKingdom, southeros["Ice"], "zmzmzmzaztzozh"));
 
+            IBallot ballot = new Ballot(contendingKingdom, messages);
+
             try
             {
-                southeros.ClaimTheThrone(contendingKingdom, messages);
+                southeros.ClaimTheThrone(ballot);
             }
             catch (Exception ex)
             {

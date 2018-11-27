@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Abstract\IBallot.cs" />
     <Compile Include="Abstract\IKingdom.cs" />
     <Compile Include="Abstract\IMessage.cs" />
     <Compile Include="Abstract\IUniverse.cs" />
