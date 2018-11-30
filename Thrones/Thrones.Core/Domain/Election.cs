@@ -40,7 +40,7 @@
             {
                 if (!this.electionCompleted)
                 {
-                    // runElection();
+                    this.RunElection();
                 }
 
                 return this.electionResults;
@@ -55,6 +55,16 @@
             }
 
             return this.winnerAndAllies;
+        }
+
+        public List<Dictionary<IKingdom, int>> GetElectionResults()
+        {
+            if (this.electionCompleted is false)
+            {
+                this.RunElection();
+            }
+
+            return this.electionResults;
         }
 
         private void RunElection()

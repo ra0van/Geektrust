@@ -41,5 +41,25 @@
             {
             }
         }
+
+        public List<Dictionary<IKingdom, int>> ElectARuler(HashSet<IKingdom> competingKingdoms)
+        {
+            Election election = new Election(competingKingdoms, this.GenerateElectorate(competingKingdoms));
+            KeyValuePair<IKingdom, HashSet<IKingdom>> rulerAndAllies = election.GetWinnerAndAllies().First();
+            this.Ruler = rulerAndAllies.Key;
+            foreach (IKingdom ally in rulerAndAllies.Value)
+            {
+                this.Ruler.AddAlly(ally);
+            }
+
+            return election.GetElectionResults();
+        }
+
+        private HashSet<IKingdom> GenerateElectorate(HashSet<IKingdom> competingKingdoms)
+        {
+            HashSet<IKingdom> electorate = new HashSet<IKingdom>(this.Kingdoms);
+            electorate.RemoveWhere(x => this.Kingdoms.Contains(x));
+            return electorate;
+        }
     }
 }
