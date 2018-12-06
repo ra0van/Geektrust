@@ -69,7 +69,6 @@
             try
             {
                 HashSet<IKingdom> kingdoms = new HashSet<IKingdom>();
-                kingdoms.Add(southeros["Air"]);
                 kingdoms.Add(southeros["Land"]);
                 kingdoms.Add(southeros["Ice"]);
                 southeros.ElectARuler(kingdoms);
