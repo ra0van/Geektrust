@@ -65,6 +65,23 @@
 
             Console.WriteLine(southeros.Ruler.Name);
             Console.WriteLine(string.Join(",", southeros.Ruler.GetAllies()));
+
+            try
+            {
+                HashSet<IKingdom> kingdoms = new HashSet<IKingdom>();
+                kingdoms.Add(southeros["Air"]);
+                kingdoms.Add(southeros["Land"]);
+                kingdoms.Add(southeros["Ice"]);
+                southeros.ElectARuler(kingdoms);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+
+            Console.WriteLine(southeros.Ruler.Name);
+            Console.WriteLine(string.Join(",", southeros.Ruler.GetAllies()));
+
             Console.ReadLine();
         }
     }

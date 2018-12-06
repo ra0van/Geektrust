@@ -10,7 +10,7 @@
     {
         private readonly HashSet<IKingdom> competingKingdoms;
         private readonly HashSet<IKingdom> electorate;
-        private readonly List<Dictionary<IKingdom, int>> electionResults = new List<Dictionary<IKingdom, int>>();
+        private readonly List<KeyValuePair<IKingdom, int>> electionResults = new List<KeyValuePair<IKingdom, int>>();
         private Dictionary<IKingdom, HashSet<IKingdom>> winnerAndAllies;
         private bool electionCompleted;
 
@@ -28,13 +28,13 @@
 
             this.competingKingdoms = competingKingdoms;
 
-            this.electorate.RemoveWhere(x => competingKingdoms.Contains(x));
+            electorate.RemoveWhere(x => competingKingdoms.Contains(x));
             this.electorate = electorate;
         }
 
         public int ElectorateStrength => this.electorate.Count;
 
-        public List<Dictionary<IKingdom, int>> ElectionResults
+        public List<KeyValuePair<IKingdom, int>> ElectionResults
         {
             get
             {
@@ -57,7 +57,7 @@
             return this.winnerAndAllies;
         }
 
-        public List<Dictionary<IKingdom, int>> GetElectionResults()
+        public List<KeyValuePair<IKingdom, int>> GetElectionResults()
         {
             if (this.electionCompleted is false)
             {
@@ -76,13 +76,31 @@
                 winners.Add(kingdom, new HashSet<IKingdom>());
             }
 
-            // do
-            // {
-            //    winners = runBallot(winners.Keys);
-            // } while (winners.Count > 1);
+            do
+            {
+                winners = this.RunBallot(winners.Keys.ToList());
+            }
+            while (winners.Count > 1 || !this.WinnerGotMinimumVote(winners));
 
-            // this.winnerAndAllies = winners.First();
+            this.winnerAndAllies = winners;
             this.electionCompleted = true;
+        }
+
+        private bool WinnerGotMinimumVote(Dictionary<IKingdom, HashSet<IKingdom>> winners)
+        {
+            return winners.Last().Value.Count > 0;
+        }
+
+        private Dictionary<IKingdom, HashSet<IKingdom>> RunBallot(List<IKingdom> kingdoms)
+        {
+            Ballot ballot = new Ballot(this.competingKingdoms, this.electorate);
+            Dictionary<IKingdom, HashSet<IKingdom>> results = ballot.GetWinners();
+            foreach (KeyValuePair<IKingdom, HashSet<IKingdom>> item in results)
+            {
+                this.electionResults.Add(new KeyValuePair<IKingdom, int>(item.Key, item.Value.Count));
+            }
+
+            return results;
         }
     }
 }

@@ -8,6 +8,7 @@
 
     public class Ballot : IBallot
     {
+        private static int randomMessagesToBePicked = 6;
         private readonly HashSet<IKingdom> competingKingdoms;
         private readonly HashSet<IKingdom> electorate;
         private readonly HashSet<IMessage> ballotBox;
@@ -34,6 +35,23 @@
             }
         }
 
+        public Ballot(HashSet<IKingdom> competingKingdoms, HashSet<IKingdom> electorate)
+        {
+            this.competingKingdoms = competingKingdoms;
+            this.electorate = electorate;
+
+            // Remove competing kingdoms from voters
+            foreach (IKingdom kingdom in competingKingdoms)
+            {
+                electorate.Remove(kingdom);
+            }
+
+            this.ballotBox = new HashSet<IMessage>();
+
+            this.winners = new Dictionary<IKingdom, HashSet<IKingdom>>();
+            this.result = new Dictionary<IKingdom, int>();
+        }
+
         public Dictionary<IKingdom, HashSet<IKingdom>> GetWinners()
         {
             if (this.electionCompleted is false)
@@ -49,12 +67,24 @@
             Dictionary<IKingdom, HashSet<IKingdom>> results;
             if (this.ballotBox.Count is 0)
             {
-                // TODO : generate for prob 2
+                this.GenerateBallotBox();
+                results = this.GetResults(this.GetSixRandomMessages());
             }
 
             results = this.GetResults(this.ballotBox);
             this.CalculateWinners(results);
             this.electionCompleted = true;
+        }
+
+        private void GenerateBallotBox()
+        {
+            foreach (IKingdom competingKingdom in this.competingKingdoms)
+            {
+                foreach (IKingdom possibleAlly in this.electorate)
+                {
+                    this.ballotBox.Add(new Message(competingKingdom, possibleAlly));
+                }
+            }
         }
 
         private Dictionary<IKingdom, HashSet<IKingdom>> GetResults(HashSet<IMessage> messages)
@@ -99,6 +129,26 @@
             {
                 this.winners.Add(winner.Key, result[winner.Key]);
             }
+        }
+
+        private HashSet<IMessage> GetSixRandomMessages()
+        {
+            if (this.ballotBox.Count < randomMessagesToBePicked)
+            {
+                return new HashSet<IMessage>(this.ballotBox);
+            }
+
+            List<IMessage> ballotBoxList = new List<IMessage>(this.ballotBox);
+            HashSet<IMessage> randomMessages = new HashSet<IMessage>();
+            Random random = new Random();
+            for (int i = 0; i < randomMessagesToBePicked; i++)
+            {
+                int randomIndex = random.Next(ballotBoxList.Count);
+                randomMessages.Add(ballotBoxList[randomIndex]);
+                ballotBoxList.RemoveAt(randomIndex);
+            }
+
+            return randomMessages;
         }
     }
 }

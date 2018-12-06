@@ -23,29 +23,23 @@
 
         public void ClaimTheThrone(IBallot ballot)
         {
-            try
-            {
-                Dictionary<IKingdom, HashSet<IKingdom>> winners = ballot.GetWinners();
+            Dictionary<IKingdom, HashSet<IKingdom>> winners = ballot.GetWinners();
 
-                KeyValuePair<IKingdom, HashSet<IKingdom>> winner = winners.FirstOrDefault();
-                if (winners.Count > 0 && winner.Value.Count >= MINIMUMALLIESTOCLAIMTHETHRONE)
-                {
-                    this.Ruler = winner.Key;
-                    foreach (IKingdom ally in winner.Value)
-                    {
-                        this.Ruler.AddAlly(ally);
-                    }
-                }
-            }
-            catch (Exception ex)
+            KeyValuePair<IKingdom, HashSet<IKingdom>> winner = winners.FirstOrDefault();
+            if (winners.Count > 0 && winner.Value.Count >= MINIMUMALLIESTOCLAIMTHETHRONE)
             {
+                this.Ruler = winner.Key;
+                foreach (IKingdom ally in winner.Value)
+                {
+                    this.Ruler.AddAlly(ally);
+                }
             }
         }
 
-        public List<Dictionary<IKingdom, int>> ElectARuler(HashSet<IKingdom> competingKingdoms)
+        public List<KeyValuePair<IKingdom, int>> ElectARuler(HashSet<IKingdom> competingKingdoms)
         {
             Election election = new Election(competingKingdoms, this.GenerateElectorate(competingKingdoms));
-            KeyValuePair<IKingdom, HashSet<IKingdom>> rulerAndAllies = election.GetWinnerAndAllies().First();
+            KeyValuePair<IKingdom, HashSet<IKingdom>> rulerAndAllies = election.GetWinnerAndAllies().OrderByDescending(x => x.Value).First();
             this.Ruler = rulerAndAllies.Key;
             foreach (IKingdom ally in rulerAndAllies.Value)
             {
@@ -58,7 +52,7 @@
         private HashSet<IKingdom> GenerateElectorate(HashSet<IKingdom> competingKingdoms)
         {
             HashSet<IKingdom> electorate = new HashSet<IKingdom>(this.Kingdoms);
-            electorate.RemoveWhere(x => this.Kingdoms.Contains(x));
+            electorate.RemoveWhere(x => competingKingdoms.Contains(x));
             return electorate;
         }
     }
