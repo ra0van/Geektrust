@@ -11,14 +11,14 @@ namespace geektrust.Family.Implementation
     public sealed class FamilyGraph : IFamilyGraph, IBaseRelationships
     {
         private Dictionary<Person, PersonRelationships> Families;
-        public IPersonStore PersonStore { get; private set; }
+        public IPersonStorage PersonStore { get; private set; }
 
-        public FamilyGraph(IPersonStore personStore)
+        public FamilyGraph(IPersonStorage personStore)
         {
             Families = new Dictionary<Person, PersonRelationships>();
             PersonStore = personStore;
         }
-        
+
         /// <summary>
         /// Adds a relation from source person to target person of the specified type relationshipType
         /// </summary>
@@ -56,7 +56,7 @@ namespace geektrust.Family.Implementation
         public void AddChild(string motherName, string childName, string gender)
         {
             var mother = PersonStore.GetPeople(motherName);
-            if(mother.Gender != Gender.Female)
+            if (mother.Gender != Gender.Female)
             {
                 throw new InvalidOperationException("Mother is not a female.");
             }
@@ -64,23 +64,23 @@ namespace geektrust.Family.Implementation
             var child = PersonStore.AddPerson(childName, childGender);
             var motherRelationship = GetRelationship(mother);
             AddRelationship(motherName, childName, "Parent");
-            if(motherRelationship.Spouse != null)
+            if (motherRelationship.Spouse != null)
             {
                 AddRelationship(motherRelationship.Spouse.Name, childName, "Parent");
             }
         }
-        
+
         #region Private Methods
         private void AddSpouseRelationship(Relationship edge)
         {
             PersonRelationships sourcePersonRelationships, targetPeopleRelationships;
 
-            if(!Families.TryGetValue(edge.Source, out sourcePersonRelationships))
+            if (!Families.TryGetValue(edge.Source, out sourcePersonRelationships))
             {
                 sourcePersonRelationships = new PersonRelationships();
                 Families.Add(edge.Source, sourcePersonRelationships);
             }
-            if(!Families.TryGetValue(edge.Target, out targetPeopleRelationships))
+            if (!Families.TryGetValue(edge.Target, out targetPeopleRelationships))
             {
                 targetPeopleRelationships = new PersonRelationships();
                 Families.Add(edge.Target, targetPeopleRelationships);

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace geektrust.Family.Interfaces
 {
-    public interface IPersonStore
+    public interface IPersonStorage
     {
         Person AddPerson(string personName, Gender gender);
         bool ContainsPerson(string personName);

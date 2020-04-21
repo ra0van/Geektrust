@@ -8,13 +8,13 @@ using System.Threading;
 
 namespace geektrust.Family.Implementation
 {
-    public class PersonStore : IPersonStore
+    public class PersonStorage : IPersonStorage
     {
         private Dictionary<string, Person> peopleStore;
         private int Id;
         private static object Lock = new object();
 
-        public PersonStore()
+        public PersonStorage()
         {
             peopleStore = new Dictionary<string, Person>();
             Id = 1;
@@ -23,11 +23,11 @@ namespace geektrust.Family.Implementation
         public Person AddPerson(string personName, Gender gender)
         {
             Person person;
-            if(ContainsPerson(personName))
+            if (ContainsPerson(personName))
             {
                 throw new ArgumentException($"{personName} is already present");
             }
-            lock(Lock)
+            lock (Lock)
             {
                 person = new Person(personName, gender, Id);
                 peopleStore.Add(personName, person);
@@ -58,11 +58,11 @@ namespace geektrust.Family.Implementation
             }
             return result;
         }
-        
+
         public Person GetPeople(string personName)
         {
             bool result = peopleStore.TryGetValue(personName, out Person person);
-            if(!result)
+            if (!result)
             {
                 throw new ArgumentException($"{personName} isn't found");
             }

@@ -12,23 +12,23 @@ namespace geektrust.Family.Tests
 {
     public class FamilyGraphTests
     {
-        public IPersonStore PersonStore;
+        public IPersonStorage storage;
         public IFamilyGraph familyGraph;
 
         [OneTimeSetUp]
         public void SetUp()
         {
-            PersonStore = new PersonStore();
-            Person george = PersonStore.AddPerson("George", Gender.Male);
-            Person mary = PersonStore.AddPerson("Mary", Gender.Female);
-            Person bob = PersonStore.AddPerson("Bob", Gender.Male);
-            Person sally = PersonStore.AddPerson("Sally", Gender.Female);
-            familyGraph = new FamilyGraph(PersonStore);
+            storage = new PersonStorage();
+            Person george = storage.AddPerson("George", Gender.Male);
+            Person mary = storage.AddPerson("Mary", Gender.Female);
+            Person bob = storage.AddPerson("Bob", Gender.Male);
+            Person sally = storage.AddPerson("Sally", Gender.Female);
+            familyGraph = new FamilyGraph(storage);
         }
         [Test]
         public void AddSpouseForExistingPeopleShouldNotThrowException()
         {
-            Action act = ()=> familyGraph.AddRelationship("George", "Mary", "Spouse");
+            Action act = () => familyGraph.AddRelationship("George", "Mary", "Spouse");
             act.Should().NotThrow();
         }
         [Test]
@@ -37,6 +37,6 @@ namespace geektrust.Family.Tests
             Action act = () => familyGraph.AddRelationship("Bob", "Sally", "Parent");
             act.Should().NotThrow();
         }
-        
+
     }
 }

@@ -13,14 +13,14 @@ namespace geektrust.Family.Tests
 {
     public class BaseRelationshipsTests
     {
-        public IPersonStore PersonStore;
+        public IPersonStorage PersonStore;
 
         Person george, mary, bob, sally, dave;
 
         [OneTimeSetUp]
         public void SetUp()
         {
-            PersonStore = new PersonStore();
+            PersonStore = new PersonStorage();
             george = PersonStore.AddPerson("George", Gender.Male);
             mary = PersonStore.AddPerson("Mary", Gender.Female);
             bob = PersonStore.AddPerson("Bob", Gender.Male);

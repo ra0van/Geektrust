@@ -13,39 +13,39 @@ namespace Family.Tests
     public class RelationshipsTests
     {
 
-        Person george,mary,bob,sally,dave,davesMaternalUncle,davesPaternalAunt,davesMaternalGrandDad,
-        davesMaternalGrandMom,davesPaternalGrandDad,davesPaternalGrandMom,amy,
-        bamy,miller,amysBrother,amysBrother1,amysMom,amysDad;
+        Person george, mary, bob, sally, dave, davesMaternalUncle, davesPaternalAunt, davesMaternalGrandDad,
+        davesMaternalGrandMom, davesPaternalGrandDad, davesPaternalGrandMom, amy,
+        bamy, miller, amysBrother, amysBrother1, amysMom, amysDad;
 
 
-       Relationships relationships;
+        Relationships relationships;
 
         [OneTimeSetUp]
         public void SetUp()
         {
-            IPersonStore PersonStore = new PersonStore();
+            IPersonStorage storage = new PersonStorage();
 
-            george = PersonStore.AddPerson("George", Gender.Male);
-            mary = PersonStore.AddPerson("Mary", Gender.Female);
-            bob = PersonStore.AddPerson("Bob", Gender.Male);
-            sally = PersonStore.AddPerson("Sally", Gender.Female);
-            dave = PersonStore.AddPerson("Dave", Gender.Male);
-            davesMaternalUncle = PersonStore.AddPerson("Hulk", Gender.Male);
-            davesPaternalAunt = PersonStore.AddPerson("Aunt", Gender.Female);
-            davesMaternalGrandDad = PersonStore.AddPerson("Thor", Gender.Male);
-            davesMaternalGrandMom = PersonStore.AddPerson("Wonder", Gender.Female);
-            davesPaternalGrandDad = PersonStore.AddPerson("Thor1", Gender.Male);
-            davesPaternalGrandMom = PersonStore.AddPerson("Wonder1", Gender.Female);
+            george = storage.AddPerson("George", Gender.Male);
+            mary = storage.AddPerson("Mary", Gender.Female);
+            bob = storage.AddPerson("Bob", Gender.Male);
+            sally = storage.AddPerson("Sally", Gender.Female);
+            dave = storage.AddPerson("Dave", Gender.Male);
+            davesMaternalUncle = storage.AddPerson("Hulk", Gender.Male);
+            davesPaternalAunt = storage.AddPerson("Aunt", Gender.Female);
+            davesMaternalGrandDad = storage.AddPerson("Thor", Gender.Male);
+            davesMaternalGrandMom = storage.AddPerson("Wonder", Gender.Female);
+            davesPaternalGrandDad = storage.AddPerson("Thor1", Gender.Male);
+            davesPaternalGrandMom = storage.AddPerson("Wonder1", Gender.Female);
 
-            amy = PersonStore.AddPerson("Amy", Gender.Female);
-            bamy = PersonStore.AddPerson("Bamy", Gender.Female);
-            miller = PersonStore.AddPerson("Miller", Gender.Male);
-            amysBrother = PersonStore.AddPerson("BigB", Gender.Male);
-            amysBrother1 = PersonStore.AddPerson("ABig", Gender.Male);
-            amysMom = PersonStore.AddPerson("Miley", Gender.Female);
-            amysDad = PersonStore.AddPerson("Brad", Gender.Male);
+            amy = storage.AddPerson("Amy", Gender.Female);
+            bamy = storage.AddPerson("Bamy", Gender.Female);
+            miller = storage.AddPerson("Miller", Gender.Male);
+            amysBrother = storage.AddPerson("BigB", Gender.Male);
+            amysBrother1 = storage.AddPerson("ABig", Gender.Male);
+            amysMom = storage.AddPerson("Miley", Gender.Female);
+            amysDad = storage.AddPerson("Brad", Gender.Male);
 
-            FamilyGraph familyGraph = new FamilyGraph(PersonStore);
+            FamilyGraph familyGraph = new FamilyGraph(storage);
 
             //Daves Family
             familyGraph.AddRelationship("Thor", "Mary", "Parent");

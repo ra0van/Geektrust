@@ -11,20 +11,20 @@ namespace geektrust.family
 {
     class Program
     {
-        static IPersonStore personStore;
+        static IPersonStorage personStorage;
         static FamilyGraph FamilyGraph;
-        static Relationships FamilyRelationships;
+        static Relationships relations;
 
         static void Main(string[] args)
         {
-            personStore = new PersonStore();
+            personStorage = new PersonStorage();
             LoadPeople();
 
-            FamilyGraph = new FamilyGraph(personStore);
-            LoadRelationships();
+            FamilyGraph = new FamilyGraph(personStorage);
+            LoadRelations();
 
-            FamilyRelationships = new Relationships(FamilyGraph);
-            using (var reader = new StreamReader(@"InputFiles\Testcase.txt"))
+            relations = new Relationships(FamilyGraph);
+            using (var reader = new StreamReader(Path.Combine("InputFiles", "Testcase.txt")))
             {
                 while (!reader.EndOfStream)
                 {
@@ -39,7 +39,7 @@ namespace geektrust.family
                     {
                         try
                         {
-                            GetRelationship(values);
+                            GetRelation(values);
                         }
                         catch (Exception) { }
                     }
@@ -49,15 +49,15 @@ namespace geektrust.family
             Console.ReadKey();
         }
 
-        private static void GetRelationship(List<string> values)
+        private static void GetRelation(List<string> values)
         {
-            IEnumerable<Person> result = new List<Person>();
+            IEnumerable<Person> response = new List<Person>();
             switch (values[2])
             {
                 case "Paternal-Uncle":
                     try
                     {
-                        result = FamilyRelationships.PaternalUncle(values[1]);
+                        response = relations.PaternalUncle(values[1]);
                     }
                     catch (ArgumentException)
                     {
@@ -68,7 +68,7 @@ namespace geektrust.family
                 case "Maternal-Uncle":
                     try
                     {
-                        result = FamilyRelationships.MaternalUncle(values[1]);
+                        response = relations.MaternalUncle(values[1]);
                     }
                     catch (ArgumentException)
                     {
@@ -79,7 +79,7 @@ namespace geektrust.family
                 case "Paternal-Aunt":
                     try
                     {
-                        result = FamilyRelationships.PaternalAunt(values[1]);
+                        response = relations.PaternalAunt(values[1]);
                     }
                     catch (ArgumentException)
                     {
@@ -90,7 +90,7 @@ namespace geektrust.family
                 case "Maternal-Aunt":
                     try
                     {
-                        result = FamilyRelationships.MaternalAunt(values[1]);
+                        response = relations.MaternalAunt(values[1]);
                     }
                     catch (ArgumentException)
                     {
@@ -101,7 +101,7 @@ namespace geektrust.family
                 case "Brother-In-Law":
                     try
                     {
-                        result = FamilyRelationships.BrotherInLaw(values[1]);
+                        response = relations.BrotherInLaw(values[1]);
                     }
                     catch (ArgumentException)
                     {
@@ -112,7 +112,7 @@ namespace geektrust.family
                 case "Sister-In-Law":
                     try
                     {
-                        result = FamilyRelationships.SisterInLaw(values[1]);
+                        response = relations.SisterInLaw(values[1]);
                     }
                     catch (ArgumentException)
                     {
@@ -123,7 +123,7 @@ namespace geektrust.family
                 case "Son":
                     try
                     {
-                        result = FamilyRelationships.Son(values[1]);
+                        response = relations.Son(values[1]);
                     }
                     catch (ArgumentException)
                     {
@@ -134,7 +134,7 @@ namespace geektrust.family
                 case "Daughter":
                     try
                     {
-                        result = FamilyRelationships.Daughter(values[1]);
+                        response = relations.Daughter(values[1]);
                     }
                     catch (ArgumentException)
                     {
@@ -145,7 +145,7 @@ namespace geektrust.family
                 case "Siblings":
                     try
                     {
-                        result = FamilyRelationships.Siblings(values[1]);
+                        response = relations.Siblings(values[1]);
                     }
                     catch (ArgumentException)
                     {
@@ -154,8 +154,8 @@ namespace geektrust.family
                     }
                     break;
             }
-            var names = result.Select(m => m.Name);
-            string namesAsString = names.Count() == 0 ? "NONE"  : string.Join(" ", names);
+            var names = response.Select(m => m.Name);
+            string namesAsString = names.Count() == 0 ? "NONE" : string.Join(" ", names);
             Console.WriteLine($"Output : {namesAsString}");
         }
 
@@ -177,14 +177,14 @@ namespace geektrust.family
             }
         }
 
-        private static void LoadRelationships()
+        private static void LoadRelations()
         {
-            using (var reader = new StreamReader(@"InputFiles\Relationships.txt"))
+            using (var reader = new StreamReader(Path.Combine("InputFiles", "Relationships.txt")))
             {
                 while (!reader.EndOfStream)
                 {
                     var line = reader.ReadLine();
-                    var values = line.Split(',').Select(m=> m.Trim()).ToList();
+                    var values = line.Split(',').Select(m => m.Trim()).ToList();
                     FamilyGraph.AddRelationship(values[0], values[1], values[2]);
                 }
             }
@@ -192,14 +192,14 @@ namespace geektrust.family
 
         private static void LoadPeople()
         {
-            using (var reader = new StreamReader(@"InputFiles\People.txt"))
+            using (var reader = new StreamReader(Path.Combine("InputFiles", "People.txt")))
             {
                 while (!reader.EndOfStream)
                 {
                     var line = reader.ReadLine();
-                    var values = line.Split(',').Select(m=> m.Trim()).ToList();
+                    var values = line.Split(',').Select(m => m.Trim()).ToList();
                     Gender gender = values[1].ToGenderEnum();
-                    personStore.AddPerson(values[0], gender);
+                    personStorage.AddPerson(values[0], gender);
                 }
             }
         }
