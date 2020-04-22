@@ -5,8 +5,6 @@ using geektrust.Family.Interfaces;
 using FluentAssertions;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace geektrust.Family.Tests
 {
@@ -19,10 +17,10 @@ namespace geektrust.Family.Tests
         public void SetUp()
         {
             storage = new PersonStorage();
-            Person george = storage.AddPerson("George", Gender.Male);
-            Person mary = storage.AddPerson("Mary", Gender.Female);
-            Person bob = storage.AddPerson("Bob", Gender.Male);
-            Person sally = storage.AddPerson("Sally", Gender.Female);
+            PersonDTO george = storage.AddPerson("George", Gender.Male);
+            PersonDTO mary = storage.AddPerson("Mary", Gender.Female);
+            PersonDTO bob = storage.AddPerson("Bob", Gender.Male);
+            PersonDTO sally = storage.AddPerson("Sally", Gender.Female);
             familyGraph = new FamilyGraph(storage);
         }
         [Test]

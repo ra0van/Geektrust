@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace geektrust.Family.DTO
 {
-    public sealed class Person : IEquatable<Person>
+    public sealed class PersonDTO : IEquatable<PersonDTO>
     {
-        public Person(string name, Gender gender, int id)
+        public PersonDTO(string name, Gender gender, int id)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
@@ -25,10 +25,10 @@ namespace geektrust.Family.DTO
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as Person);
+            return Equals(obj as PersonDTO);
         }
 
-        public bool Equals(Person other)
+        public bool Equals(PersonDTO other)
         {
             return other != null &&
                    Name == other.Name &&
@@ -41,12 +41,12 @@ namespace geektrust.Family.DTO
             return HashCode.Combine(Name, Gender, Id);
         }
 
-        public static bool operator ==(Person person1, Person person2)
+        public static bool operator ==(PersonDTO person1, PersonDTO person2)
         {
-            return EqualityComparer<Person>.Default.Equals(person1, person2);
+            return EqualityComparer<PersonDTO>.Default.Equals(person1, person2);
         }
 
-        public static bool operator !=(Person person1, Person person2)
+        public static bool operator !=(PersonDTO person1, PersonDTO person2)
         {
             return !(person1 == person2);
         }

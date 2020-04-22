@@ -13,7 +13,7 @@ namespace geektrust.family
     {
         static IPersonStorage personStorage;
         static FamilyGraph FamilyGraph;
-        static Relationships relations;
+        static BaseRelationships relations;
 
         static void Main(string[] args)
         {
@@ -23,14 +23,14 @@ namespace geektrust.family
             FamilyGraph = new FamilyGraph(personStorage);
             LoadRelations();
 
-            relations = new Relationships(FamilyGraph);
+            relations = new BaseRelationships(FamilyGraph);
             using (var reader = new StreamReader(Path.Combine("InputFiles", "Testcase.txt")))
             {
                 while (!reader.EndOfStream)
                 {
                     var input = reader.ReadLine();
                     var values = input.Split(" ").Select(m => m.Trim()).ToList();
-                    Console.WriteLine($"TestCase: {input}");
+                    // Console.WriteLine($"TestCase: {input}");
                     if (values[0] == "ADD_CHILD")
                     {
                         AddChild(values);
@@ -46,122 +46,60 @@ namespace geektrust.family
                     Console.WriteLine();
                 }
             }
-            Console.ReadKey();
+            //Console.ReadKey();
         }
 
         private static void GetRelation(List<string> values)
         {
-            IEnumerable<Person> response = new List<Person>();
-            switch (values[2])
+            IEnumerable<PersonDTO> response = new List<PersonDTO>();
+            try
             {
-                case "Paternal-Uncle":
-                    try
-                    {
+                switch (values[2])
+                {
+                    case "Paternal-Uncle":
                         response = relations.PaternalUncle(values[1]);
-                    }
-                    catch (ArgumentException)
-                    {
-                        Console.WriteLine("Output : PERSON_NOT_FOUND");
-                        throw;
-                    }
-                    break;
-                case "Maternal-Uncle":
-                    try
-                    {
+                        break;
+                    case "Maternal-Uncle":
                         response = relations.MaternalUncle(values[1]);
-                    }
-                    catch (ArgumentException)
-                    {
-                        Console.WriteLine("Output : PERSON_NOT_FOUND");
-                        throw;
-                    }
-                    break;
-                case "Paternal-Aunt":
-                    try
-                    {
+                        break;
+                    case "Paternal-Aunt":
                         response = relations.PaternalAunt(values[1]);
-                    }
-                    catch (ArgumentException)
-                    {
-                        Console.WriteLine("Output : PERSON_NOT_FOUND");
-                        throw;
-                    }
-                    break;
-                case "Maternal-Aunt":
-                    try
-                    {
+                        break;
+                    case "Maternal-Aunt":
                         response = relations.MaternalAunt(values[1]);
-                    }
-                    catch (ArgumentException)
-                    {
-                        Console.WriteLine("Output : PERSON_NOT_FOUND");
-                        throw;
-                    }
-                    break;
-                case "Brother-In-Law":
-                    try
-                    {
+                        break;
+                    case "Brother-In-Law":
                         response = relations.BrotherInLaw(values[1]);
-                    }
-                    catch (ArgumentException)
-                    {
-                        Console.WriteLine("Output : PERSON_NOT_FOUND");
-                        throw;
-                    }
-                    break;
-                case "Sister-In-Law":
-                    try
-                    {
+                        break;
+                    case "Sister-In-Law":
                         response = relations.SisterInLaw(values[1]);
-                    }
-                    catch (ArgumentException)
-                    {
-                        Console.WriteLine("Output : PERSON_NOT_FOUND");
-                        throw;
-                    }
-                    break;
-                case "Son":
-                    try
-                    {
+                        break;
+                    case "Son":
                         response = relations.Son(values[1]);
-                    }
-                    catch (ArgumentException)
-                    {
-                        Console.WriteLine("Output : PERSON_NOT_FOUND");
-                        throw;
-                    }
-                    break;
-                case "Daughter":
-                    try
-                    {
+                        break;
+                    case "Daughter":
                         response = relations.Daughter(values[1]);
-                    }
-                    catch (ArgumentException)
-                    {
-                        Console.WriteLine("Output : PERSON_NOT_FOUND");
-                        throw;
-                    }
-                    break;
-                case "Siblings":
-                    try
-                    {
+                        break;
+                    case "Siblings":
                         response = relations.Siblings(values[1]);
-                    }
-                    catch (ArgumentException)
-                    {
-                        Console.WriteLine("Output : PERSON_NOT_FOUND");
-                        throw;
-                    }
-                    break;
+                        break;
+                }
             }
+            catch (ArgumentException)
+            {
+                Console.WriteLine("PERSON_NOT_FOUND");
+                throw;
+            }
+
             var names = response.Select(m => m.Name);
             string namesAsString = names.Count() == 0 ? "NONE" : string.Join(" ", names);
-            Console.WriteLine($"Output : {namesAsString}");
+            //Console.WriteLine($" {namesAsString}");
+            Console.WriteLine($"{namesAsString}");
         }
 
         private static void AddChild(List<string> values)
         {
-            Console.Write("Output : ");
+            //Console.Write(" ");
             try
             {
                 FamilyGraph.AddChild(values[1], values[2], values[3]);

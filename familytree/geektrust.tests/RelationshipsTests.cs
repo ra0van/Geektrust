@@ -4,21 +4,19 @@ using geektrust.Family.Implementation;
 using geektrust.Family.Interfaces;
 using FluentAssertions;
 using NUnit.Framework;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Family.Tests
 {
     public class RelationshipsTests
     {
 
-        Person george, mary, bob, sally, dave, davesMaternalUncle, davesPaternalAunt, davesMaternalGrandDad,
+        PersonDTO george, mary, bob, sally, dave, davesMaternalUncle, davesPaternalAunt, davesMaternalGrandDad,
         davesMaternalGrandMom, davesPaternalGrandDad, davesPaternalGrandMom, amy,
         bamy, miller, amysBrother, amysBrother1, amysMom, amysDad;
 
 
-        Relationships relationships;
+        BaseRelationships relationships;
 
         [OneTimeSetUp]
         public void SetUp()
@@ -81,35 +79,35 @@ namespace Family.Tests
             familyGraph.AddRelationship("Brad", "Bamy", "Parent");
             familyGraph.AddRelationship("Miley", "Bamy", "Parent");
 
-            relationships = new Relationships(familyGraph);
+            relationships = new BaseRelationships(familyGraph);
         }
 
         [Test]
         public void MaternalUncleTest()
         {
             var davesUncle = relationships.MaternalUncle("Dave");
-            var expected = new List<Person>() { davesMaternalUncle };
+            var expected = new List<PersonDTO>() { davesMaternalUncle };
             davesUncle.Should().BeEquivalentTo(expected, m => m.WithStrictOrdering());
         }
         [Test]
         public void MaternalUncleTest1()
         {
             var amysUncle = relationships.MaternalUncle("Amy");
-            var expected = new List<Person>() { };
+            var expected = new List<PersonDTO>() { };
             amysUncle.Should().BeEquivalentTo(expected, m => m.WithStrictOrdering());
         }
         [Test]
         public void PaternalAuntTest()
         {
             var davesAunt = relationships.PaternalAunt("Dave");
-            var expected = new List<Person>() { davesPaternalAunt };
+            var expected = new List<PersonDTO>() { davesPaternalAunt };
             davesAunt.Should().BeEquivalentTo(expected, m => m.WithStrictOrdering());
         }
         [Test]
         public void MaternalAuntTest1()
         {
             var amysUncle = relationships.MaternalAunt("Amy");
-            var expected = new List<Person>() { };
+            var expected = new List<PersonDTO>() { };
             amysUncle.Should().BeEquivalentTo(expected, m => m.WithStrictOrdering());
         }
 
@@ -117,42 +115,42 @@ namespace Family.Tests
         public void BrotherInLawTest()
         {
             var AmysInLaws = relationships.BrotherInLaw("Amy");
-            var expected = new List<Person>() { bob };
+            var expected = new List<PersonDTO>() { bob };
             AmysInLaws.Should().BeEquivalentTo(expected, m => m.WithStrictOrdering());
         }
         [Test]
         public void SisterInLawTest()
         {
             var AmysInLaws = relationships.SisterInLaw("Amy");
-            var expected = new List<Person>() { sally };
+            var expected = new List<PersonDTO>() { sally };
             AmysInLaws.Should().BeEquivalentTo(expected, m => m.WithStrictOrdering());
         }
         [Test]
         public void BrotherInLawTest1()
         {
             var DavesInLaws = relationships.BrotherInLaw("Dave");
-            var expected = new List<Person>() { miller, amysBrother, amysBrother1 };
+            var expected = new List<PersonDTO>() { miller, amysBrother, amysBrother1 };
             DavesInLaws.Should().BeEquivalentTo(expected, m => m.WithStrictOrdering());
         }
         [Test]
         public void SisterInLawTest1()
         {
             var AmysInLaws = relationships.SisterInLaw("Bob");
-            var expected = new List<Person>() { amy };
+            var expected = new List<PersonDTO>() { amy };
             AmysInLaws.Should().BeEquivalentTo(expected, m => m.WithStrictOrdering());
         }
         [Test]
         public void SonTest1()
         {
             var GeorgeSons = relationships.Son("George");
-            var expected = new List<Person>() { bob, dave };
+            var expected = new List<PersonDTO>() { bob, dave };
             GeorgeSons.Should().BeEquivalentTo(expected, m => m.WithStrictOrdering());
         }
         [Test]
         public void DaughterTest1()
         {
             var GeorgeSons = relationships.Daughter("George");
-            var expected = new List<Person>() { sally };
+            var expected = new List<PersonDTO>() { sally };
             GeorgeSons.Should().BeEquivalentTo(expected, m => m.WithStrictOrdering());
         }
     }

@@ -15,7 +15,7 @@ namespace geektrust.Family.Tests
     {
         public IPersonStorage PersonStore;
 
-        Person george, mary, bob, sally, dave;
+        PersonDTO george, mary, bob, sally, dave;
 
         [OneTimeSetUp]
         public void SetUp()
@@ -35,8 +35,8 @@ namespace geektrust.Family.Tests
             FamilyGraph familyGraph = new FamilyGraph(PersonStore);
             familyGraph.AddRelationship("George", "Bob", "Parent");
             familyGraph.AddRelationship("Mary", "Bob", "Parent");
-            IEnumerable<Person> actual = familyGraph.Parents(bob);
-            IEnumerable<Person> expected = PersonStore.GetPeople(new List<string>() { "George", "Mary" });
+            IEnumerable<PersonDTO> actual = familyGraph.Parents(bob);
+            IEnumerable<PersonDTO> expected = PersonStore.GetPeople(new List<string>() { "George", "Mary" });
             actual.Should().BeEquivalentTo(expected);
 
         }
@@ -45,8 +45,8 @@ namespace geektrust.Family.Tests
         {
             //AddRelationship George and Mary as Bob's Parents
             FamilyGraph familyGraph = new FamilyGraph(PersonStore);
-            IEnumerable<Person> actual = familyGraph.Parents(bob);
-            IEnumerable<Person> expected = new List<Person>();
+            IEnumerable<PersonDTO> actual = familyGraph.Parents(bob);
+            IEnumerable<PersonDTO> expected = new List<PersonDTO>();
             actual.Should().BeEquivalentTo(expected);
 
         }
@@ -61,8 +61,8 @@ namespace geektrust.Family.Tests
             familyGraph.AddRelationship("Mary", "Dave", "Parent");
             familyGraph.AddRelationship("George", "Sally", "Parent");
             familyGraph.AddRelationship("Mary", "Sally", "Parent");
-            IEnumerable<Person> actual = familyGraph.Siblings(dave);
-            IEnumerable<Person> expected = PersonStore.GetPeople(new List<string>() { "Bob", "Sally" });
+            IEnumerable<PersonDTO> actual = familyGraph.Siblings(dave);
+            IEnumerable<PersonDTO> expected = PersonStore.GetPeople(new List<string>() { "Bob", "Sally" });
             actual.Should().BeEquivalentTo(expected);
         }
         [Test]
@@ -89,8 +89,8 @@ namespace geektrust.Family.Tests
             familyGraph.AddRelationship("Mary", "Dave", "Parent");
             familyGraph.AddRelationship("George", "Sally", "Parent");
             familyGraph.AddRelationship("Mary", "Sally", "Parent");
-            IEnumerable<Person> actual = familyGraph.Children(george);
-            IEnumerable<Person> expected = new List<Person>() { dave, bob, sally };
+            IEnumerable<PersonDTO> actual = familyGraph.Children(george);
+            IEnumerable<PersonDTO> expected = new List<PersonDTO>() { dave, bob, sally };
             actual.Should().BeEquivalentTo(expected);
         }
 
