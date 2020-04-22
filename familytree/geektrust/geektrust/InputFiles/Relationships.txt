@@ -1,0 +1,50 @@
+﻿King Shan, Chit, Parent
+Queen Anga, Chit, Parent
+King Shan, Ish, Parent
+Queen Anga, Ish, Parent
+King Shan, Vich, Parent
+Queen Anga, Vich, Parent
+King Shan, Aras, Parent
+Queen Anga, Aras, Parent
+King Shan, Satya, Parent
+Queen Anga, Satya, Parent
+Chit, Amba, Spouse
+Vich, Lika, Spouse
+Aras, Chitra, Spouse
+Satya, Vyan, Spouse
+Chit, Dritha, Parent
+Amba, Dritha, Parent
+Chit, Tritha, Parent
+Amba, Tritha, Parent
+Chit, Vritha, Parent
+Amba, Vritha, Parent
+Dritha, Jaya, Spouse
+Dritha, Yodhan, Parent
+Jaya, Yodhan, Parent
+Vich, Vila, Parent
+Lika, Vila, Parent
+Vich, Chika, Parent
+Lika, Chika, Parent
+Aras, Jnki, Parent
+Chitra, Jnki, Parent
+Aras, Ahit, Parent
+Chitra, Ahit, Parent
+Arit, Jnki, Spouse
+Arit, Laki, Parent
+Jnki, Laki, Parent
+Arit, Lavnya, Parent
+Jnki, Lavnya, Parent
+Satya, Asva, Parent
+Vyan, Asva, Parent
+Satya, Vyas, Parent
+Vyan, Vyas, Parent
+Satya, Atya, Parent
+Vyan, Atya, Parent
+Krpi, Vyas, Spouse
+Asva, Satvy, Spouse
+Krpi, Kriya, Parent
+Vyas, Kriya, Parent
+Krpi, Krithi, Parent
+Vyas, Krithi, Parent
+Satvy, Vasa, Parent
+Asva, Vasa, Parent

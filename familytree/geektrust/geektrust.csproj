@@ -10,10 +10,10 @@
     <None Update="InputFiles\Testcase.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="InputFiles\Relationships.txt">
+    <None Update="InputFiles\Relations.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="InputFiles\People.txt">
+    <None Update="InputFiles\Peeps.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

@@ -29,7 +29,7 @@ namespace geektrust.Family.Tests
         }
 
         [Test]
-        public void ParentsTest()
+        public void Parents_Test()
         {
             //AddRelationship George and Mary as Bob's Parents
             FamilyGraph familyGraph = new FamilyGraph(PersonStore);
@@ -41,7 +41,7 @@ namespace geektrust.Family.Tests
 
         }
         [Test]
-        public void EmptyParentsTest()
+        public void EmptyParents_Test()
         {
             //AddRelationship George and Mary as Bob's Parents
             FamilyGraph familyGraph = new FamilyGraph(PersonStore);
@@ -51,7 +51,7 @@ namespace geektrust.Family.Tests
 
         }
         [Test]
-        public void SiblingsTest()
+        public void Siblings_Test()
         {
             //AddRelationship George and Mary as Bob's Parents
             FamilyGraph familyGraph = new FamilyGraph(PersonStore);
@@ -66,7 +66,7 @@ namespace geektrust.Family.Tests
             actual.Should().BeEquivalentTo(expected);
         }
         [Test]
-        public void SiblingsHaveSameParentsTest()
+        public void Siblings_Have_SameParents_Test()
         {
             //AddRelationship George and Mary as Bob's Parents
             FamilyGraph familyGraph = new FamilyGraph(PersonStore);
@@ -79,7 +79,7 @@ namespace geektrust.Family.Tests
             familyGraph.Parents(dave).Should().BeEquivalentTo(familyGraph.Parents(bob));
         }
         [Test]
-        public void ChildrenTest()
+        public void Children_Test()
         {
             //AddRelationship George and Mary as Bob's Parents
             FamilyGraph familyGraph = new FamilyGraph(PersonStore);

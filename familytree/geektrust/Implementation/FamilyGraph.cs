@@ -4,11 +4,10 @@ using geektrust.Family.Extention;
 using geektrust.Family.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace geektrust.Family.Implementation
 {
-    public sealed class FamilyGraph : IFamilyGraph, IBaseRelation
+    public sealed partial class FamilyGraph : IFamilyGraph, IBaseRelation
     {
         private Dictionary<PersonDTO, Relationships> Families;
         public IPersonStorage storage { get; private set; }
@@ -140,108 +139,6 @@ namespace geektrust.Family.Implementation
                 throw;
             }
             return new RelationshipDTO(sourcePerson, targetPerson, relationship);
-        }
-        #endregion
-
-        #region Base Relationships
-        public IEnumerable<PersonDTO> Parents(IEnumerable<PersonDTO> people, Gender? gender = null)
-        {
-            return people.SelectMany(m => Parents(m, gender));
-        }
-        public IEnumerable<PersonDTO> Parents(IEnumerable<string> people, Gender? gender = null)
-        {
-            var peopleObject = storage.GetPeople(people);
-            return Parents(peopleObject, gender);
-        }
-        public IEnumerable<PersonDTO> Children(IEnumerable<PersonDTO> people, Gender? gender = null)
-        {
-            return people.SelectMany(m => Children(m, gender));
-        }
-        public IEnumerable<PersonDTO> Children(IEnumerable<string> people, Gender? gender = null)
-        {
-            var peopleObject = storage.GetPeople(people);
-            return Children(peopleObject, gender);
-        }
-        public IEnumerable<PersonDTO> Siblings(IEnumerable<PersonDTO> people, Gender? gender = null)
-        {
-            return people.SelectMany(m => Siblings(m, gender));
-        }
-        public IEnumerable<PersonDTO> Siblings(IEnumerable<string> people, Gender? gender = null)
-        {
-            var peopleObject = storage.GetPeople(people);
-            return Siblings(peopleObject, gender);
-        }
-        public IEnumerable<PersonDTO> Spouse(IEnumerable<PersonDTO> people)
-        {
-            return people.SelectMany(m => Spouse(m));
-        }
-        public IEnumerable<PersonDTO> Spouse(IEnumerable<string> people)
-        {
-            var peopleObject = storage.GetPeople(people);
-            return Spouse(peopleObject);
-        }
-
-        public IEnumerable<PersonDTO> Parents(PersonDTO person, Gender? gender = null)
-        {
-            List<PersonDTO> response = new List<PersonDTO>();
-            Relationships personRelationships = GetRelationship(person);
-            if (personRelationships == null)
-            {
-                return response;
-            }
-            IEnumerable<PersonDTO> parents = personRelationships.Parents
-                .Where(m => gender == null || m.Gender == gender);
-            response.AddRange(parents);
-            return response;
-        }
-        public IEnumerable<PersonDTO> Parents(string person, Gender? gender = null)
-        {
-            var personObject = storage.GetPeople(person);
-            return Parents(personObject, gender);
-        }
-        public IEnumerable<PersonDTO> Children(PersonDTO person, Gender? gender = null)
-        {
-            List<PersonDTO> response = new List<PersonDTO>();
-            Relationships personRelationships = GetRelationship(person);
-            List<PersonDTO> children = personRelationships.Edges
-                .Where(m => m.RelationshipType == geektrust.Family.Enums.Type.Parent)
-                .Where(m => gender == null || m.TargetPerson.Gender == gender)
-                .Select(m => m.TargetPerson)
-                .ToList();
-            response.AddRange(children);
-            return response;
-        }
-        public IEnumerable<PersonDTO> Children(string name, Gender? gender = null)
-        {
-            var response = storage.GetPeople(name);
-            return Children(response, gender);
-        }
-        public IEnumerable<PersonDTO> Siblings(PersonDTO person, Gender? gender = null)
-        {
-            var parents = Parents(person);
-            var filteredResponse = Children(parents, gender);
-            return filteredResponse.Distinct()
-                    .Where(m => !m.Equals(person));
-        }
-        public IEnumerable<PersonDTO> Siblings(string name, Gender? gender = null)
-        {
-            var response = storage.GetPeople(name);
-            return Siblings(response, gender);
-        }
-        public IEnumerable<PersonDTO> Spouse(PersonDTO person)
-        {
-            List<PersonDTO> response = new List<PersonDTO>();
-            Relationships relations = GetRelationship(person);
-            if (relations.Spouse != null)
-            {
-                response.Add(relations.Spouse);
-            }
-            return response;
-        }
-        public IEnumerable<PersonDTO> Spouse(string name)
-        {
-            var response = storage.GetPeople(name);
-            return Spouse(response);
         }
         #endregion
     }

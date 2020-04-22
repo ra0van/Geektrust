@@ -24,16 +24,16 @@ namespace geektrust.Family.Tests
             familyGraph = new FamilyGraph(storage);
         }
         [Test]
-        public void AddSpouseForExistingPeopleShouldNotThrowException()
+        public void AddSpouseForExistingPeople_ShouldNotThrowException()
         {
-            Action act = () => familyGraph.AddRelationship("George", "Mary", "Spouse");
-            act.Should().NotThrow();
+            Action result = () => familyGraph.AddRelationship("George", "Mary", "Spouse");
+            result.Should().NotThrow();
         }
         [Test]
-        public void AddParentForExistingPeopleShouldNotThrowException()
+        public void AddParentForExistingPeople_ShouldNotThrowException()
         {
-            Action act = () => familyGraph.AddRelationship("Bob", "Sally", "Parent");
-            act.Should().NotThrow();
+            Action result = () => familyGraph.AddRelationship("Bob", "Sally", "Parent");
+            result.Should().NotThrow();
         }
 
     }

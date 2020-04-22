@@ -117,7 +117,7 @@ namespace geektrust.family
 
         private static void LoadRelations()
         {
-            using (var reader = new StreamReader(Path.Combine("InputFiles", "Relationships.txt")))
+            using (var reader = new StreamReader(Path.Combine("InputFiles", "Relations.txt")))
             {
                 while (!reader.EndOfStream)
                 {
@@ -130,7 +130,7 @@ namespace geektrust.family
 
         private static void LoadPeople()
         {
-            using (var reader = new StreamReader(Path.Combine("InputFiles", "People.txt")))
+            using (var reader = new StreamReader(Path.Combine("InputFiles", "Peeps.txt")))
             {
                 while (!reader.EndOfStream)
                 {

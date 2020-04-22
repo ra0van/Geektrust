@@ -12,11 +12,11 @@ namespace geektrust.Family.Tests
         PersonDTO bob = new PersonDTO("Bob", Gender.Male, 1);
 
         [Test]
-        public void AddingEdgeTest()
+        public void AddingEdge_Test()
         {
-            var personRelationship = new Relationships();
-            personRelationship.AddParent(bob);
-            personRelationship.Parents.Should().BeEquivalentTo(new List<PersonDTO>() { bob });
+            var relation = new Relationships();
+            relation.AddParent(bob);
+            relation.SourceParents.Should().BeEquivalentTo(new List<PersonDTO>() { bob });
         }
     }
 }
