@@ -1,6 +1,6 @@
 ﻿namespace geektrust.Family.Enums
 {
-    public enum RelationshipType
+    public enum Type
     {
         Parent,
         Spouse

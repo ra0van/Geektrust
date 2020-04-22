@@ -11,12 +11,12 @@ namespace geektrust.Family.Implementation
     public sealed class FamilyGraph : IFamilyGraph, IBaseRelation
     {
         private Dictionary<PersonDTO, Relationships> Families;
-        public IPersonStorage PersonStore { get; private set; }
+        public IPersonStorage storage { get; private set; }
 
         public FamilyGraph(IPersonStorage personStore)
         {
             Families = new Dictionary<PersonDTO, Relationships>();
-            PersonStore = personStore;
+            storage = personStore;
         }
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace geektrust.Family.Implementation
         /// <param name="relationshipType">Type of relationship => Parent or Spouse</param>
         public void AddRelationship(string source, string target, string relationshipType)
         {
-            Relationship edge;
+            RelationshipDTO edge;
             try
             {
                 edge = BuildRelationship(source, target, relationshipType);
@@ -38,10 +38,10 @@ namespace geektrust.Family.Implementation
             }
             switch (edge.RelationshipType)
             {
-                case RelationshipType.Parent:
+                case Enums.Type.Parent:
                     AddParentRelationship(edge);
                     return;
-                case RelationshipType.Spouse:
+                case Enums.Type.Spouse:
                     AddSpouseRelationship(edge);
                     return;
             }
@@ -55,13 +55,13 @@ namespace geektrust.Family.Implementation
         /// <param name="gender">Gender of the child</param>
         public void AddChild(string motherName, string childName, string gender)
         {
-            var mother = PersonStore.GetPeople(motherName);
+            var mother = storage.GetPeople(motherName);
             if (mother.Gender != Gender.Female)
             {
                 throw new InvalidOperationException("Mother is not a female.");
             }
-            var childGender = gender.ToGenderEnum();
-            var child = PersonStore.AddPerson(childName, childGender);
+            var childGender = gender.ToGender();
+            var child = storage.AddPerson(childName, childGender);
             var motherRelationship = GetRelationship(mother);
             AddRelationship(motherName, childName, "Parent");
             if (motherRelationship.Spouse != null)
@@ -71,54 +71,54 @@ namespace geektrust.Family.Implementation
         }
 
         #region Private Methods
-        private void AddSpouseRelationship(Relationship edge)
+        private void AddSpouseRelationship(RelationshipDTO edge)
         {
             Relationships sourcePersonRelationships, targetPeopleRelationships;
 
-            if (!Families.TryGetValue(edge.Source, out sourcePersonRelationships))
+            if (!Families.TryGetValue(edge.SourcePerson, out sourcePersonRelationships))
             {
                 sourcePersonRelationships = new Relationships();
-                Families.Add(edge.Source, sourcePersonRelationships);
+                Families.Add(edge.SourcePerson, sourcePersonRelationships);
             }
-            if (!Families.TryGetValue(edge.Target, out targetPeopleRelationships))
+            if (!Families.TryGetValue(edge.TargetPerson, out targetPeopleRelationships))
             {
                 targetPeopleRelationships = new Relationships();
-                Families.Add(edge.Target, targetPeopleRelationships);
+                Families.Add(edge.TargetPerson, targetPeopleRelationships);
             }
 
             if (targetPeopleRelationships.Spouse == null && sourcePersonRelationships.Spouse == null)
             {
-                targetPeopleRelationships.AddSpouse(edge.Source);
-                sourcePersonRelationships.AddSpouse(edge.Target);
+                targetPeopleRelationships.AddSpouse(edge.SourcePerson);
+                sourcePersonRelationships.AddSpouse(edge.TargetPerson);
             }
             else
             {
                 throw new InvalidOperationException($"Cannot add spouse");
             }
         }
-        private void AddParentRelationship(Relationship edge)
+        private void AddParentRelationship(RelationshipDTO edge)
         {
             Relationships sourcePersonRelationships, targetPeopleRelationships;
 
-            if (!Families.TryGetValue(edge.Source, out sourcePersonRelationships))
+            if (!Families.TryGetValue(edge.SourcePerson, out sourcePersonRelationships))
             {
                 sourcePersonRelationships = new Relationships();
-                Families.Add(edge.Source, sourcePersonRelationships);
+                Families.Add(edge.SourcePerson, sourcePersonRelationships);
             }
-            if (!Families.TryGetValue(edge.Target, out targetPeopleRelationships))
+            if (!Families.TryGetValue(edge.TargetPerson, out targetPeopleRelationships))
             {
                 targetPeopleRelationships = new Relationships();
-                Families.Add(edge.Target, targetPeopleRelationships);
+                Families.Add(edge.TargetPerson, targetPeopleRelationships);
             }
 
-            if (targetPeopleRelationships.CanAddParent(edge.Source))
+            if (targetPeopleRelationships.CanAddParent(edge.SourcePerson))
             {
-                targetPeopleRelationships.AddParent(edge.Source);
+                targetPeopleRelationships.AddParent(edge.SourcePerson);
                 sourcePersonRelationships.AddEdge(edge);
             }
             else
             {
-                throw new InvalidOperationException($"Cannot add parents to {edge.Target.Name}");
+                throw new InvalidOperationException($"Cannot add parents to {edge.TargetPerson.Name}");
             }
         }
         private Relationships GetRelationship(PersonDTO person)
@@ -126,20 +126,20 @@ namespace geektrust.Family.Implementation
             Families.TryGetValue(person, out var personRelationships);
             return personRelationships;
         }
-        private Relationship BuildRelationship(string source, string target, string relationshipType)
+        private RelationshipDTO BuildRelationship(string source, string target, string relationshipType)
         {
             PersonDTO sourcePerson, targetPerson;
-            var relationship = relationshipType.ToRelationshipEnum();
+            var relationship = relationshipType.ToRelation();
             try
             {
-                sourcePerson = PersonStore.GetPeople(source);
-                targetPerson = PersonStore.GetPeople(target);
+                sourcePerson = storage.GetPeople(source);
+                targetPerson = storage.GetPeople(target);
             }
             catch (Exception)
             {
                 throw;
             }
-            return new Relationship(sourcePerson, targetPerson, relationship);
+            return new RelationshipDTO(sourcePerson, targetPerson, relationship);
         }
         #endregion
 
@@ -150,7 +150,7 @@ namespace geektrust.Family.Implementation
         }
         public IEnumerable<PersonDTO> Parents(IEnumerable<string> people, Gender? gender = null)
         {
-            var peopleObject = PersonStore.GetPeople(people);
+            var peopleObject = storage.GetPeople(people);
             return Parents(peopleObject, gender);
         }
         public IEnumerable<PersonDTO> Children(IEnumerable<PersonDTO> people, Gender? gender = null)
@@ -159,7 +159,7 @@ namespace geektrust.Family.Implementation
         }
         public IEnumerable<PersonDTO> Children(IEnumerable<string> people, Gender? gender = null)
         {
-            var peopleObject = PersonStore.GetPeople(people);
+            var peopleObject = storage.GetPeople(people);
             return Children(peopleObject, gender);
         }
         public IEnumerable<PersonDTO> Siblings(IEnumerable<PersonDTO> people, Gender? gender = null)
@@ -168,7 +168,7 @@ namespace geektrust.Family.Implementation
         }
         public IEnumerable<PersonDTO> Siblings(IEnumerable<string> people, Gender? gender = null)
         {
-            var peopleObject = PersonStore.GetPeople(people);
+            var peopleObject = storage.GetPeople(people);
             return Siblings(peopleObject, gender);
         }
         public IEnumerable<PersonDTO> Spouse(IEnumerable<PersonDTO> people)
@@ -177,71 +177,71 @@ namespace geektrust.Family.Implementation
         }
         public IEnumerable<PersonDTO> Spouse(IEnumerable<string> people)
         {
-            var peopleObject = PersonStore.GetPeople(people);
+            var peopleObject = storage.GetPeople(people);
             return Spouse(peopleObject);
         }
 
         public IEnumerable<PersonDTO> Parents(PersonDTO person, Gender? gender = null)
         {
-            List<PersonDTO> result = new List<PersonDTO>();
+            List<PersonDTO> response = new List<PersonDTO>();
             Relationships personRelationships = GetRelationship(person);
             if (personRelationships == null)
             {
-                return result;
+                return response;
             }
             IEnumerable<PersonDTO> parents = personRelationships.Parents
                 .Where(m => gender == null || m.Gender == gender);
-            result.AddRange(parents);
-            return result;
+            response.AddRange(parents);
+            return response;
         }
         public IEnumerable<PersonDTO> Parents(string person, Gender? gender = null)
         {
-            var personObject = PersonStore.GetPeople(person);
+            var personObject = storage.GetPeople(person);
             return Parents(personObject, gender);
         }
         public IEnumerable<PersonDTO> Children(PersonDTO person, Gender? gender = null)
         {
-            List<PersonDTO> result = new List<PersonDTO>();
+            List<PersonDTO> response = new List<PersonDTO>();
             Relationships personRelationships = GetRelationship(person);
             List<PersonDTO> children = personRelationships.Edges
-                .Where(m => m.RelationshipType == RelationshipType.Parent)
-                .Where(m => gender == null || m.Target.Gender == gender)
-                .Select(m => m.Target)
+                .Where(m => m.RelationshipType == geektrust.Family.Enums.Type.Parent)
+                .Where(m => gender == null || m.TargetPerson.Gender == gender)
+                .Select(m => m.TargetPerson)
                 .ToList();
-            result.AddRange(children);
-            return result;
+            response.AddRange(children);
+            return response;
         }
-        public IEnumerable<PersonDTO> Children(string person, Gender? gender = null)
+        public IEnumerable<PersonDTO> Children(string name, Gender? gender = null)
         {
-            var personObject = PersonStore.GetPeople(person);
-            return Children(personObject, gender);
+            var response = storage.GetPeople(name);
+            return Children(response, gender);
         }
         public IEnumerable<PersonDTO> Siblings(PersonDTO person, Gender? gender = null)
         {
             var parents = Parents(person);
-            var children = Children(parents, gender);
-            return children.Distinct()
+            var filteredResponse = Children(parents, gender);
+            return filteredResponse.Distinct()
                     .Where(m => !m.Equals(person));
         }
-        public IEnumerable<PersonDTO> Siblings(string person, Gender? gender = null)
+        public IEnumerable<PersonDTO> Siblings(string name, Gender? gender = null)
         {
-            var personObject = PersonStore.GetPeople(person);
-            return Siblings(personObject, gender);
+            var response = storage.GetPeople(name);
+            return Siblings(response, gender);
         }
         public IEnumerable<PersonDTO> Spouse(PersonDTO person)
         {
-            List<PersonDTO> result = new List<PersonDTO>();
-            Relationships personRelationships = GetRelationship(person);
-            if (personRelationships.Spouse != null)
+            List<PersonDTO> response = new List<PersonDTO>();
+            Relationships relations = GetRelationship(person);
+            if (relations.Spouse != null)
             {
-                result.Add(personRelationships.Spouse);
+                response.Add(relations.Spouse);
             }
-            return result;
+            return response;
         }
-        public IEnumerable<PersonDTO> Spouse(string person)
+        public IEnumerable<PersonDTO> Spouse(string name)
         {
-            var personObject = PersonStore.GetPeople(person);
-            return Spouse(personObject);
+            var response = storage.GetPeople(name);
+            return Spouse(response);
         }
         #endregion
     }

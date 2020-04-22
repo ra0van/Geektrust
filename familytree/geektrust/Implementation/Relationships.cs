@@ -8,16 +8,16 @@ namespace geektrust.Family.Implementation
 {
     internal sealed class Relationships
     {
-        public List<Relationship> Edges { get; private set; }
+        public List<RelationshipDTO> Edges { get; private set; }
         public List<PersonDTO> Parents { get; private set; }
         public PersonDTO Spouse { get; private set; }
 
         public Relationships()
         {
-            Edges = new List<Relationship>();
+            Edges = new List<RelationshipDTO>();
             Parents = new List<PersonDTO>();
         }
-        public Relationships(List<Relationship> edges, List<PersonDTO> persons)
+        public Relationships(List<RelationshipDTO> edges, List<PersonDTO> persons)
         {
             Edges = edges;
             Parents = persons;
@@ -30,7 +30,7 @@ namespace geektrust.Family.Implementation
             return !Parents.Any(m => m.Gender == parent.Gender);
         }
 
-        public void AddEdge(Relationship edge)
+        public void AddEdge(RelationshipDTO edge)
         {
             Edges.Add(edge);
         }

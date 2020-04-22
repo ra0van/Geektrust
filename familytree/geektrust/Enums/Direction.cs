@@ -1,6 +1,6 @@
 ﻿namespace geektrust.Family.Enums
 {
-    public enum RelationshipDirection
+    public enum Direction
     {
         Maternal,
         Paternal

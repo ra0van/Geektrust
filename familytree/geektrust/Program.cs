@@ -136,7 +136,7 @@ namespace geektrust.family
                 {
                     var line = reader.ReadLine();
                     var values = line.Split(',').Select(m => m.Trim()).ToList();
-                    Gender gender = values[1].ToGenderEnum();
+                    Gender gender = values[1].ToGender();
                     personStorage.AddPerson(values[0], gender);
                 }
             }

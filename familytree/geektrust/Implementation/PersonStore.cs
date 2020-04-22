@@ -11,7 +11,7 @@ namespace geektrust.Family.Implementation
     {
         private Dictionary<string, PersonDTO> storage;
         private int Id;
-        private static object Lock = new object();
+        private static object sharedStorage = new object();
 
         public PersonStorage()
         {
@@ -26,7 +26,7 @@ namespace geektrust.Family.Implementation
             {
                 throw new ArgumentException($"{personName} is already present");
             }
-            lock (Lock)
+            lock (sharedStorage)
             {
                 person = new PersonDTO(personName, gender, Id);
                 storage.Add(personName, person);
@@ -42,30 +42,30 @@ namespace geektrust.Family.Implementation
 
         public IEnumerable<PersonDTO> GetPeople(IEnumerable<string> people)
         {
-            List<PersonDTO> result = new List<PersonDTO>();
+            List<PersonDTO> response = new List<PersonDTO>();
             foreach (var person in people)
             {
                 try
                 {
                     PersonDTO personObject = GetPeople(person);
-                    result.Add(personObject);
+                    response.Add(personObject);
                 }
                 catch (Exception)
                 {
                     throw;
                 }
             }
-            return result;
+            return response;
         }
 
-        public PersonDTO GetPeople(string personName)
+        public PersonDTO GetPeople(string name)
         {
-            bool result = storage.TryGetValue(personName, out PersonDTO person);
+            bool result = storage.TryGetValue(name, out PersonDTO response);
             if (!result)
             {
-                throw new ArgumentException($"{personName} isn't found");
+                throw new ArgumentException($"{name} isn't found");
             }
-            return person;
+            return response;
         }
     }
 }

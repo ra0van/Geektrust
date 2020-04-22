@@ -8,7 +8,7 @@ namespace geektrust.Family.DTO
     {
         public PersonDTO(string name, Gender gender, int id)
         {
-            if (string.IsNullOrWhiteSpace(name))
+            if (string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(name))
             {
                 throw new ArgumentException("message", nameof(name));
             }
@@ -30,10 +30,11 @@ namespace geektrust.Family.DTO
 
         public bool Equals(PersonDTO other)
         {
-            return other != null &&
+            bool equals = other != null &&
                    Name == other.Name &&
                    Gender == other.Gender &&
                    Id == other.Id;
+            return equals;
         }
 
         public override int GetHashCode()
